@@ -7,9 +7,16 @@ public class jump : MonoBehaviour
     private Rigidbody2D rigidbody2D;
     private BoxCollider2D collider2D;
     [SerializeField]
-    public float jumpforce;
-    public bool isGrounded = true;
-    public float raycastdistance;
+    private float jumpforce;
+    [SerializeField]
+    private bool isGrounded = true;
+    [SerializeField]
+    private float raycastdistance;
+    [SerializeField]
+    private LayerMask groundLayer;
+    [SerializeField]
+    private bool isResetJumpNeeded = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,48 +27,40 @@ public class jump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && isGrounded == true)
         {
-            Jump();
-
+            Jump();  
         }
 
         Grounded();
-        OnCollisionEnter();
     }
 
     void Jump()
     {
-        // jump function
-        // is grounded
-        if (isGrounded)
-        {
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpforce);
-            isGrounded = false;
-        }
-        
+        rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpforce);
+        isGrounded = false;
+        isResetJumpNeeded = true;
+        StartCoroutine(isResetJumpNeededRoutine());
     }
 
     private void Grounded()
     {
-        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, Vector2.down, raycastdistance);
+        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, Vector2.down * raycastdistance, raycastdistance, groundLayer);
+        Debug.DrawRay(transform.position, Vector2.down * raycastdistance, Color.green);
 
         if (hitinfo.collider != null)
         {
-            isGrounded = true;
+            if (isResetJumpNeeded == false)
+            {
+                isGrounded = true;
+            }
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    IEnumerator isResetJumpNeededRoutine()
     {
-        foreach (ContactPoint contact in collision.contacts)
-        {
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
-        }
-
-
-
+        yield return new WaitForSeconds(0.1f);
+        isResetJumpNeeded = false;
     }
-
 
 }

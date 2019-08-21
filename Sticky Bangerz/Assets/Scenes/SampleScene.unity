@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 413452423}
   - component: {fileID: 413452422}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tatami
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,7 +392,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpforce: 5
   isGrounded: 1
-  raycastdistance: 10
+  raycastdistance: 1.69
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isResetJumpNeeded: 0
 --- !u!1 &1459215486
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,7 +569,7 @@ GameObject:
   - component: {fileID: 1943457872}
   - component: {fileID: 1943457871}
   - component: {fileID: 1943457870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
